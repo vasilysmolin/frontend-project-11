@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  - push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: use node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm i
+        run: make setup
+      - name: eslint
+        run: make lint
+#      - name: tests
+#        uses: paambaati/codeclimate-action@v2.7.4
+#        env:
+#          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE }}
+#        with:
+#          coverageCommand: make test-coverage
+#          coverageLocations: ${{github.workplace}}/coverage/clover.xml:clover
+#          debug: true

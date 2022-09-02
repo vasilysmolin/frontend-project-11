@@ -1,0 +1,72 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "My webpack project",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --colors",
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
+  },
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/",
+    "testEnvironment": "jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasilysmolin/frontend-project-11.git"
+  },
+  "keywords": [
+    "front",
+    "js",
+    "react"
+  ],
+  "author": "vasilysmolin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vasilysmolin/frontend-project-11/issues"
+  },
+  "homepage": "https://github.com/vasilysmolin/frontend-project-11#readme",
+  "devDependencies": {
+    "@babel/core": "^7.18.13",
+    "@babel/eslint-parser": "^7.18.9",
+    "@babel/preset-env": "^7.18.10",
+    "@popperjs/core": "^2.11.6",
+    "@webpack-cli/generators": "^2.5.0",
+    "babel-jest": "^29.0.1",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "csv-loader": "^3.0.5",
+    "debug": "^4.3.4",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.26.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "jest": "^29.0.1",
+    "jest-cli": "^29.0.1",
+    "json5": "^2.2.1",
+    "postcss-loader": "^7.0.1",
+    "postcss-preset-env": "^7.8.0",
+    "prettier": "^2.7.1",
+    "style-loader": "^3.3.1",
+    "toml": "^3.0.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.10.1",
+    "workbox-webpack-plugin": "^6.5.4",
+    "xml-loader": "^1.2.1",
+    "yamljs": "^0.3.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.0",
+    "lodash": "^4.17.21",
+    "path": "^0.12.7"
+  }
+}
