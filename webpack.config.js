@@ -1,5 +1,3 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
-
 const path = require("path");
 const toml = require('toml');
 const yaml = require('yamljs');
@@ -22,9 +20,6 @@ const config = {
     new HtmlWebpackPlugin({
       template: "index.html",
     }),
-
-    // Add your plugins here
-    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
   module: {
     rules: [
