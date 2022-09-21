@@ -5,20 +5,53 @@ import i18next from 'i18next';
 import watch from './watchers.js';
 
 export default () => {
-    const from = document.querySelector('.rss-form');
-    const textDanger = document.querySelector('.text-danger');
-    const url = document.querySelector('[aria-label="url"]');
-    const add = document.querySelector('[aria-label="add"]');
-    console.log(textDanger);
+
+    // создание экземпляра i18next
+    // const i18nextInstance = i18next.createInstance();
+    // i18nextInstance.init({
+    //     lng: 'ru',
+    //     body: {
+    //       'h1': 'RSS агрегатор',
+    //     },
+    //     form: {
+    //         'url': ''
+    //     },
+    // });
+
+    const state = {
+        form: {
+            state: 'valid',
+            data: {
+                url: '',
+            },
+            error: null,
+        },
+    };
+
+    const elements = {
+        from: document.querySelector('.rss-form'),
+        textDanger: document.querySelector('.text-danger'),
+        url: document.querySelector('[aria-label="url"]'),
+        add: document.querySelector('[aria-label="add"]'),
+    }
 
     let userSchema = object({
         url: string().url(),
     });
 
-    add.addEventListener('click', function (e){
+    const watchedState = watch(elements, state);
+
+    elements.add.addEventListener('click', function (e) {
         e.preventDefault();
-        const urlValidate = userSchema.validateSync({url: url.value},{ abortEarly: false });
-        console.log(urlValidate);
+        userSchema.validate({url: elements.url.value},{ abortEarly: false })
+            .then(() => null)
+            .catch((e) => {
+                watchedState.form = {
+                    ...watchedState.form,
+                    state: 'invalid',
+                    error: e.message,
+                };
+            });
     });
 
 
