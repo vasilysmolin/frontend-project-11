@@ -2,9 +2,58 @@ import onChange from 'on-change';
 
 export default (elements, state, i18n) => {
     return onChange(state, (path, value) => {
+        console.log(path, value);
         if (path === 'form') {
             if (state.form.state === 'invalid') {
                 elements.textDanger.textContent = i18n.t([`errors.${value.error.key}`]);
+            }
+            if (state.form.state === 'fill') {
+                const divElFeeds = document.createElement('div');
+                divElFeeds.classList.add('card', 'border-0');
+                divElFeeds.innerHTML = `<div class='card-body'></div>`;
+                const feedTitle = document.createElement('h2');
+                feedTitle.classList.add('card-title', 'h4');
+                feedTitle.textContent = i18n.t('feeds');
+                divElFeeds.querySelector('.card-body').appendChild(feedTitle);
+                elements.feeds.append(divElFeeds);
+
+                const liFeedEl = document.createElement('li');
+                liFeedEl.classList.add('list-group-item', 'border-0', 'border-end-0');
+                const title = document.createElement('h3');
+                title.classList.add('h6', 'm-0');
+                title.textContent = value.rss.title;
+                const description = document.createElement('p');
+                description.classList.add('m-0', 'small', 'text-black-50');
+                description.textContent = value.rss.description;
+                liFeedEl.append(title, description);
+
+                elements.feeds.append(liFeedEl);
+
+                const divElPosts = document.createElement('div');
+                divElPosts.classList.add('card', 'border-0');
+                divElPosts.innerHTML = `<div class='card-body'></div>`;
+                const postTitle = document.createElement('h2');
+                postTitle.classList.add('card-title', 'h4');
+                postTitle.textContent = i18n.t('posts');
+                divElPosts.querySelector('.card-body').appendChild(postTitle);
+                elements.posts.append(divElPosts);
+
+                const ulPostsEl = document.createElement('ul');
+                ulPostsEl.classList.add('list-group', 'border-0', 'rounded-0');
+                const feeds = value.rss.feeds.map((post) => {
+                    const liPostEl = document.createElement('li');
+                    liPostEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+                    const link = document.createElement('a');
+                    link.setAttribute('href', post.link);
+                    link.dataset.id = post.id;
+                    link.textContent = post.title;
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                    liPostEl.appendChild(link)
+                    return liPostEl;
+                });
+                ulPostsEl.append(...feeds);
+                elements.posts.append(ulPostsEl);
             }
         }
     });

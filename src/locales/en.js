@@ -4,5 +4,7 @@ export default {
             required: 'url dont empty',
             notUrl: 'url dont valid',
         },
+        post: 'Post',
+        feeds: 'Feeds',
     }
 }
