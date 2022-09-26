@@ -2,12 +2,12 @@ import onChange from 'on-change';
 
 export default (elements, state, i18n) => {
     return onChange(state, (path, value) => {
-        console.log(path, value);
         if (path === 'form') {
             if (state.form.state === 'invalid') {
-                elements.textDanger.textContent = i18n.t([`errors.${value.error.key}`]);
+                elements.textDanger.textContent = i18n.t([`errors.${value.error}`]);
             }
             if (state.form.state === 'fill') {
+                const { feeds, posts } = state;
                 const divElFeeds = document.createElement('div');
                 divElFeeds.classList.add('card', 'border-0');
                 divElFeeds.innerHTML = `<div class='card-body'></div>`;
@@ -15,19 +15,25 @@ export default (elements, state, i18n) => {
                 feedTitle.classList.add('card-title', 'h4');
                 feedTitle.textContent = i18n.t('feeds');
                 divElFeeds.querySelector('.card-body').appendChild(feedTitle);
+                elements.feeds.innerHTML = '';
                 elements.feeds.append(divElFeeds);
+                const ulFeedsEl = document.createElement('ul');
+                ulFeedsEl.classList.add('list-group', 'border-0', 'rounded-0');
+                const feedsEl = feeds.map((feed) => {
+                    const liFeedEl = document.createElement('li');
+                    liFeedEl.classList.add('list-group-item', 'border-0', 'border-end-0');
+                    const title = document.createElement('h3');
+                    title.classList.add('h6', 'm-0');
+                    title.textContent = feed.title;
+                    const description = document.createElement('p');
+                    description.classList.add('m-0', 'small', 'text-black-50');
+                    description.textContent = feed.description;
+                    liFeedEl.append(title, description);
+                    return liFeedEl;
+                })
+                ulFeedsEl.append(...feedsEl);
+                elements.feeds.append(ulFeedsEl);
 
-                const liFeedEl = document.createElement('li');
-                liFeedEl.classList.add('list-group-item', 'border-0', 'border-end-0');
-                const title = document.createElement('h3');
-                title.classList.add('h6', 'm-0');
-                title.textContent = value.rss.title;
-                const description = document.createElement('p');
-                description.classList.add('m-0', 'small', 'text-black-50');
-                description.textContent = value.rss.description;
-                liFeedEl.append(title, description);
-
-                elements.feeds.append(liFeedEl);
 
                 const divElPosts = document.createElement('div');
                 divElPosts.classList.add('card', 'border-0');
@@ -36,11 +42,12 @@ export default (elements, state, i18n) => {
                 postTitle.classList.add('card-title', 'h4');
                 postTitle.textContent = i18n.t('posts');
                 divElPosts.querySelector('.card-body').appendChild(postTitle);
+                elements.posts.innerHTML = '';
                 elements.posts.append(divElPosts);
 
                 const ulPostsEl = document.createElement('ul');
                 ulPostsEl.classList.add('list-group', 'border-0', 'rounded-0');
-                const feeds = value.rss.feeds.map((post) => {
+                const postsEl = posts.map((post) => {
                     const liPostEl = document.createElement('li');
                     liPostEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
                     const link = document.createElement('a');
@@ -52,7 +59,7 @@ export default (elements, state, i18n) => {
                     liPostEl.appendChild(link)
                     return liPostEl;
                 });
-                ulPostsEl.append(...feeds);
+                ulPostsEl.append(...postsEl);
                 elements.posts.append(ulPostsEl);
             }
         }

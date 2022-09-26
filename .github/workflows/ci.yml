@@ -21,11 +21,3 @@ jobs:
         run: make setup
       - name: eslint
         run: make lint
-#      - name: tests
-#        uses: paambaati/codeclimate-action@v2.7.4
-#        env:
-#          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE }}
-#        with:
-#          coverageCommand: make test-coverage
-#          coverageLocations: ${{github.workplace}}/coverage/clover.xml:clover
-#          debug: true
