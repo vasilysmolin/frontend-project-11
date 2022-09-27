@@ -1,24 +1,24 @@
-const path = require("path");
+const path = require('path');
 const toml = require('toml');
 const yaml = require('yamljs');
 const json5 = require('json5');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 const config = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     open: true,
-    host: "localhost",
+    host: 'localhost',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      template: 'index.html',
     }),
   ],
   module: {
@@ -35,7 +35,7 @@ const config = {
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: "asset",
+        type: 'asset',
       },
       {
         test: /\.(scss)$/,
@@ -44,8 +44,8 @@ const config = {
         }, {
           loader: 'css-loader', // translates CSS into CommonJS modules
         }, {
-          loader: 'sass-loader' // compiles Sass to CSS
-        }]
+          loader: 'sass-loader', // compiles Sass to CSS
+        }],
       },
       {
         test: /\.css$/i,
@@ -89,11 +89,11 @@ const config = {
 
 module.exports = () => {
   if (isProduction) {
-    config.mode = "production";
+    config.mode = 'production';
 
     config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
   } else {
-    config.mode = "development";
+    config.mode = 'development';
   }
   return config;
 };
