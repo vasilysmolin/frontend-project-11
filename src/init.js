@@ -65,6 +65,7 @@ export default () => {
                 state: 'valid',
                 error: null,
             },
+            modalId: null,
             feeds: [],
             posts: [],
         };
@@ -78,12 +79,11 @@ export default () => {
         }
 
         const watchedState = watch(elements, state, i18n);
-        // setTimeout(() => updateFeeds(watchedState));
+        setTimeout(() => updateFeeds(watchedState));
         elements.add.addEventListener('click', function (e) {
             e.preventDefault();
             validateUrl(elements.url.value, watchedState.feeds)
                 .then((error) => {
-                    console.log(error);
                         if(!error) {
                             const proxyUrl = proxy(elements.url.value);
                             return axios.get(proxyUrl).then((res) => {
@@ -118,6 +118,11 @@ export default () => {
                         error: error.key,
                     };
                 });
+        });
+        elements.posts.addEventListener('click', function(e) {
+            if(!_.isEmpty(e.target.dataset.id)) {
+                watchedState.modalId = e.target.dataset.id;
+            }
         });
     });
 };

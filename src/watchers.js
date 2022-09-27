@@ -71,6 +71,18 @@ export default (elements, state, i18n) => {
                 elements.posts.append(ulPostsEl);
             }
         }
+        if(path === 'modalId') {
+            const post = state.posts.find((post) => post.id === state.modalId);
+            const titleEl = document.querySelector('.modal-title');
+            const bodyEl = document.querySelector('.modal-body');
+            const hrefEl = document.querySelector('.full-article');
+
+            titleEl.textContent = post.title;
+            bodyEl.textContent = post.description;
+            hrefEl.setAttribute('href', post.link);
+            hrefEl.setAttribute('target', '_blank');
+            hrefEl.setAttribute('rel', 'noopener noreferrer');
+        }
     });
 };
 
