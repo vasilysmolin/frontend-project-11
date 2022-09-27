@@ -7,5 +7,6 @@ export default {
         },
         post: 'Post',
         feeds: 'Feeds',
+        button: 'View',
     }
 }

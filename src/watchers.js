@@ -49,14 +49,22 @@ export default (elements, state, i18n) => {
                 ulPostsEl.classList.add('list-group', 'border-0', 'rounded-0');
                 const postsEl = posts.map((post) => {
                     const liPostEl = document.createElement('li');
+                    const buttonElement = document.createElement('button');
+                    buttonElement.classList.add('btn', 'btn-primary');
+                    buttonElement.setAttribute('type', 'button');
+                    buttonElement.dataset.bsToggle = 'modal';
+                    buttonElement.dataset.bsTarget = '#exampleModal';
+                    buttonElement.dataset.id = post.id;
+                    buttonElement.textContent = i18n.t('button');
                     liPostEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
                     const link = document.createElement('a');
                     link.setAttribute('href', post.link);
-                    link.dataset.id = post.id;
                     link.textContent = post.title;
+                    link.dataset.id = post.id;
                     link.setAttribute('target', '_blank');
                     link.setAttribute('rel', 'noopener noreferrer');
-                    liPostEl.appendChild(link)
+                    liPostEl.appendChild(link);
+                    liPostEl.append(buttonElement);
                     return liPostEl;
                 });
                 ulPostsEl.append(...postsEl);

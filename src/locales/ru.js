@@ -7,5 +7,6 @@ export default {
         },
         posts: 'Посты',
         feeds: 'Фиды',
+        button: 'Просмотр',
     }
 }

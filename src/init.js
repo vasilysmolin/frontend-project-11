@@ -18,14 +18,30 @@ export default () => {
         return urlProxy.href;
     }
 
-    const urlSchema = yup.string().url().required();
+    const updateFeeds = (watchedState) => {
+        const proxyPosts = watchedState.feeds.map((feed) => {
+            const proxyUrl = proxy(feed.url);
+            axios.get(proxyUrl).then((res) => {
+                const data = parse(res.data.contents);
+                const posts = data.feeds.map((feed) => {
+                    return {...feed, channelId: feed.id, id: _.uniqueId() }
+                });
+                const diffPosts = watchedState.posts.filter((postState) => {
+                    const doublePost = _.find(posts, function(post) { return postState.link === post.link; });
+                    return _.isEmpty(doublePost);
+                });
+                watchedState.posts.unshift(...diffPosts);
+                watchedState.form = {
+                    ...watchedState.form,
+                    state: 'fill',
+                    error: null,
+                };
 
-    const validateUrl = (url, feeds) => {
-        const urls = feeds.map((feed) => feed.url);
-        const fullSchema = urlSchema.notOneOf(urls);
-        return fullSchema.validate(url,{ abortEarly: false })
-            .then(() => null)
-            .catch((e) => e.message)
+            });
+        });
+
+        setTimeout(() => updateFeeds(watchedState), 5000);
+        return proxyPosts;
     }
 
     const i18n = i18next.createInstance();
@@ -35,6 +51,15 @@ export default () => {
         resources: lang
     }).then(() => {
         setLocale(locale);
+        const urlSchema = yup.string().url().required();
+        const validateUrl = (url, feeds) => {
+            const urls = feeds.map((feed) => feed.url);
+            const fullSchema = urlSchema.notOneOf(urls);
+            return fullSchema.validate(url,{ abortEarly: false })
+                .then(() => null)
+                .catch((e) => e.message)
+        }
+
         const state = {
             form: {
                 state: 'valid',
@@ -53,6 +78,7 @@ export default () => {
         }
 
         const watchedState = watch(elements, state, i18n);
+        // setTimeout(() => updateFeeds(watchedState));
         elements.add.addEventListener('click', function (e) {
             e.preventDefault();
             validateUrl(elements.url.value, watchedState.feeds)
@@ -83,7 +109,6 @@ export default () => {
                                 error: error.key,
                             };
                         }
-
                     }
                 )
                 .catch((error) => {
@@ -93,9 +118,6 @@ export default () => {
                         error: error.key,
                     };
                 });
-
-            // userSchema.validate({url: elements.url.value},{ abortEarly: false })
-
         });
     });
 };
