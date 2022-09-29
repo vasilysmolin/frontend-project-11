@@ -64,6 +64,7 @@ export default () => {
       modalId: null,
       feeds: [],
       posts: [],
+      postsId: []
     };
     const elements = {
       from: document.querySelector('.rss-form'),
@@ -112,8 +113,10 @@ export default () => {
         });
     });
     elements.posts.addEventListener('click', (e) => {
-      if (!_.isEmpty(e.target.dataset.id)) {
-        watchedState.modalId = e.target.dataset.id;
+      const postId = e.target.dataset.id;
+      if (!_.isEmpty(postId)) {
+        watchedState.modalId = postId;
+        watchedState.postsId.push(postId);
       }
     });
   });

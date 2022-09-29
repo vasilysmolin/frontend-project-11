@@ -57,7 +57,10 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
         liPostEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
         const link = document.createElement('a');
         link.setAttribute('href', post.link);
+        const uiPostId = state.postsId.find((postId) => postId === post.id);
+        !_.isEmpty(uiPostId) ? link.classList.add('fw-normal') : link.classList.add('fw-bold');
         link.textContent = post.title;
+        link.dataset.postId = post.id;
         link.dataset.id = post.id;
         link.setAttribute('target', '_blank');
         link.setAttribute('rel', 'noopener noreferrer');
@@ -80,5 +83,12 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
     hrefEl.setAttribute('href', post.link);
     hrefEl.setAttribute('target', '_blank');
     hrefEl.setAttribute('rel', 'noopener noreferrer');
+  }
+  if (path === 'postsId') {
+      value.forEach((postId) => {
+        const postEl = document.querySelector(`[data-post-id="${postId}"]`);
+        postEl.classList.add('fw-normal');
+        postEl.classList.remove('fw-bold');
+      });
   }
 });
