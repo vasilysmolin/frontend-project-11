@@ -17,6 +17,16 @@ export default () => {
     return urlProxy.href;
   };
 
+  const getErrorType = (e) => {
+    if (e.isParsingRssError) {
+      return 'noRss';
+    }
+    if (e.isAxiosError) {
+      return 'network';
+    }
+    return 'unknown';
+  };
+
   const updateFeeds = (watchedState) => {
     const proxyPosts = watchedState.feeds.map((feed) => {
       const proxyUrl = proxy(feed.url);
@@ -33,7 +43,7 @@ export default () => {
           state: 'fill',
           error: null,
         };
-      });
+      }).catch(() => {});
     });
 
     setTimeout(() => updateFeeds(watchedState), 5000);
@@ -101,14 +111,14 @@ export default () => {
           watchedState.form = {
             ...watchedState.form,
             state: 'invalid',
-            error: error.key,
+            error: e.key,
           };
         })
         .catch((error) => {
           watchedState.form = {
             ...watchedState.form,
             state: 'invalid',
-            error: error.key,
+            error: getErrorType(error),
           };
         });
     });
