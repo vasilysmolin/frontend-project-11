@@ -2,9 +2,6 @@ import onChange from 'on-change';
 
 export default (elements, state, i18n) => onChange(state, (path, value) => {
   if (path === 'form') {
-    if (state.form.state === 'invalid') {
-      elements.textDanger.textContent = i18n.t([`errors.${value.error}`]);
-    }
     if (state.form.state === 'fill') {
       const { feeds, posts } = state;
       const divElFeeds = document.createElement('div');
@@ -70,6 +67,30 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
       });
       ulPostsEl.append(...postsEl);
       elements.posts.append(ulPostsEl);
+    }
+  }
+  if(path === 'loading') {
+    if (state.loading.state === 'invalid') {
+      elements.add.disabled = false;
+      elements.tips.classList.add('text-danger');
+      elements.tips.classList.remove('text-success');
+      elements.url.removeAttribute('readonly');
+      elements.tips.textContent = i18n.t([`errors.${value.error}`]);
+    }
+    if (state.loading.state === 'valid') {
+      elements.add.disabled = false;
+      elements.tips.classList.add('text-success');
+      elements.tips.classList.remove('text-danger');
+      elements.url.value = '';
+      elements.url.removeAttribute('readonly');
+      elements.tips.textContent = i18n.t([`success`]);
+    }
+    if (state.loading.state === 'loading') {
+      elements.add.disabled = true;
+      elements.tips.classList.remove('text-success');
+      elements.tips.classList.remove('text-danger');
+      elements.url.setAttribute('readonly', true);
+      elements.tips.textContent = ''
     }
   }
   if (path === 'modalId') {

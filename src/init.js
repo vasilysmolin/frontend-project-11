@@ -18,8 +18,9 @@ export default () => {
   };
 
   const getErrorType = (e) => {
+    console.log(e);
     if (e.isParsingRssError) {
-      return 'noRss';
+      return 'isNotValidRss';
     }
     if (e.isAxiosError) {
       return 'network';
@@ -61,7 +62,7 @@ export default () => {
     const validateUrl = (url, feeds) => {
       const urls = feeds.map((feed) => feed.url);
       const fullSchema = urlSchema.notOneOf(urls);
-      return fullSchema.validate(url, { abortEarly: false })
+      return fullSchema.validate(url)
         .then(() => null)
         .catch((e) => e.message);
     };
@@ -71,14 +72,18 @@ export default () => {
         state: 'valid',
         error: null,
       },
+      loading: {
+        state: 'valid',
+        error: null,
+      },
       modalId: null,
+      postsId: [],
       feeds: [],
-      posts: [],
-      postsId: []
+      posts: []
     };
     const elements = {
       from: document.querySelector('.rss-form'),
-      textDanger: document.querySelector('.text-danger'),
+      tips: document.querySelector('#tips'),
       url: document.querySelector('[aria-label="url"]'),
       add: document.querySelector('[aria-label="add"]'),
       posts: document.querySelector('.posts'),
@@ -89,7 +94,8 @@ export default () => {
     setTimeout(() => updateFeeds(watchedState));
     elements.add.addEventListener('click', (e) => {
       e.preventDefault();
-      validateUrl(elements.url.value, watchedState.feeds)
+      watchedState.loading.state = 'loading';
+      return validateUrl(elements.url.value, watchedState.feeds)
         .then((error) => {
           if (!error) {
             const proxyUrl = proxy(elements.url.value);
@@ -106,17 +112,18 @@ export default () => {
                 state: 'fill',
                 error: null,
               };
+              watchedState.loading = {...watchedState.loading, state: 'valid'};
             });
+          } else {
+            watchedState.loading = {
+              ...watchedState.loading,
+              state: 'invalid',
+              error: error.key,
+            };
           }
-          watchedState.form = {
-            ...watchedState.form,
-            state: 'invalid',
-            error: e.key,
-          };
-        })
-        .catch((error) => {
-          watchedState.form = {
-            ...watchedState.form,
+        }).catch((error) => {
+          watchedState.loading = {
+            ...watchedState.loading,
             state: 'invalid',
             error: getErrorType(error),
           };

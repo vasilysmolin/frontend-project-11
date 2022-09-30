@@ -2,9 +2,9 @@ export default {
   translation: {
     errors: {
       required: 'url dont empty',
-      exists: 'RSS exists',
-      notUrl: 'url dont valid',
-      noRss: 'This source doesn\'t contain valid rss',
+      isExists: 'RSS exists',
+      isNotValidUrl: 'url dont valid',
+      isNotValidRss: 'This source doesn\'t contain valid rss',
       unknown: 'Something went wrong',
       network: 'Network error',
     },

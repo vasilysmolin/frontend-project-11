@@ -2,9 +2,9 @@ export default {
   translation: {
     errors: {
       required: 'Не должно быть пустым',
-      exists: 'RSS уже существует',
-      notUrl: 'Ссылка должна быть валидным URL',
-      noRss: 'Ресурс не содержит валидный RSS',
+      isExists: 'RSS уже существует',
+      isNotValidUrl: 'Ссылка должна быть валидным URL',
+      isNotValidRss: 'Ресурс не содержит валидный RSS',
       unknown: 'Неизвестная ошибка. Что-то пошло не так.',
       network: 'Ошибка сети',
     },
