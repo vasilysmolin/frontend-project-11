@@ -18,7 +18,6 @@ export default () => {
   };
 
   const getErrorType = (e) => {
-    console.log(e);
     if (e.isParsingRssError) {
       return 'isNotValidRss';
     }
@@ -102,7 +101,7 @@ export default () => {
             return axios.get(proxyUrl).then((res) => {
               const data = parse(res.data.contents);
               const feed = {
-                url: elements.url.value, id: _.uniqueId(), title: data.title, description: data.descrpition,
+                url: elements.url.value, id: _.uniqueId(), title: data.title, description: data.description,
               };
               const posts = data.feeds.map((feed) => ({ ...feed, channelId: data.id, id: _.uniqueId() }));
               watchedState.feeds.unshift(feed);

@@ -24,7 +24,8 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
         const description = document.createElement('p');
         description.classList.add('m-0', 'small', 'text-black-50');
         description.textContent = feed.description;
-        liFeedEl.append(title, description);
+        liFeedEl.append(title);
+        liFeedEl.append(description);
         return liFeedEl;
       });
       ulFeedsEl.append(...feedsEl);
