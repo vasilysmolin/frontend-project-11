@@ -56,7 +56,8 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
         const link = document.createElement('a');
         link.setAttribute('href', post.link);
         const uiPostId = state.postsId.find((postId) => postId === post.id);
-        !_.isEmpty(uiPostId) ? link.classList.add('fw-normal') : link.classList.add('fw-bold');
+        const className = (uiPostId) ? ['fw-normal'] : ['fw-bold'];
+        link.classList.add(...className);
         link.textContent = post.title;
         link.dataset.postId = post.id;
         link.dataset.id = post.id;
@@ -70,7 +71,7 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
       elements.posts.append(ulPostsEl);
     }
   }
-  if(path === 'loading') {
+  if (path === 'loading') {
     if (state.loading.state === 'invalid') {
       elements.add.disabled = false;
       elements.tips.classList.add('text-danger');
@@ -84,18 +85,18 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
       elements.tips.classList.remove('text-danger');
       elements.url.value = '';
       elements.url.removeAttribute('readonly');
-      elements.tips.textContent = i18n.t([`success`]);
+      elements.tips.textContent = i18n.t(['success']);
     }
     if (state.loading.state === 'loading') {
       elements.add.disabled = true;
       elements.tips.classList.remove('text-success');
       elements.tips.classList.remove('text-danger');
       elements.url.setAttribute('readonly', true);
-      elements.tips.textContent = ''
+      elements.tips.textContent = '';
     }
   }
   if (path === 'modalId') {
-    const post = state.posts.find((post) => post.id === state.modalId);
+    const post = state.posts.find((postState) => postState.id === state.modalId);
     const titleEl = document.querySelector('.modal-title');
     const bodyEl = document.querySelector('.modal-body');
     const hrefEl = document.querySelector('.full-article');
@@ -107,10 +108,10 @@ export default (elements, state, i18n) => onChange(state, (path, value) => {
     hrefEl.setAttribute('rel', 'noopener noreferrer');
   }
   if (path === 'postsId') {
-      value.forEach((postId) => {
-        const postEl = document.querySelector(`[data-post-id="${postId}"]`);
-        postEl.classList.add('fw-normal');
-        postEl.classList.remove('fw-bold');
-      });
+    value.forEach((postId) => {
+      const postEl = document.querySelector(`[data-post-id="${postId}"]`);
+      postEl.classList.add('fw-normal');
+      postEl.classList.remove('fw-bold');
+    });
   }
 });

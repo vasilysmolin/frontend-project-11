@@ -8,10 +8,10 @@ start:
 	npx webpack serve
 
 lint:
-	npx eslint .
+	npx eslint --no-eslintrc --config .eslintrc.yml ./src
 
 lint-fix:
-	npx eslint --fix .
+	npx eslint --no-eslintrc --config .eslintrc.yml --fix ./src
 
 test:
 	npm test

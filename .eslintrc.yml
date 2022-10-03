@@ -6,6 +6,7 @@ plugins:
 env:
   node: true
   jest: true
+  browser: true
   es2021: true
 
 parserOptions:
@@ -18,4 +19,6 @@ extends:
 rules:
   no-console: 0
   import/extensions: 0
+  import/no-unresolved: 0
+  no-param-reassign: 0
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]

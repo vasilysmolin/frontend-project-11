@@ -28,9 +28,9 @@ export default () => {
   };
 
   const updateFeeds = (watchedState) => {
-    const proxyPosts = watchedState.feeds.map((feed) => {
-      const proxyUrl = proxy(feed.url);
-      axios.get(proxyUrl).then((res) => {
+    const proxyPosts = watchedState.feeds.map((stateFeed) => {
+      const proxyUrl = proxy(stateFeed.url);
+      return axios.get(proxyUrl).then((res) => {
         const data = parse(res.data.contents);
         const posts = data.feeds.map((feed) => ({ ...feed, channelId: feed.id, id: _.uniqueId() }));
         const diffPosts = watchedState.posts.filter((postState) => {
@@ -78,7 +78,7 @@ export default () => {
       modalId: null,
       postsId: [],
       feeds: [],
-      posts: []
+      posts: [],
     };
     const elements = {
       from: document.querySelector('.rss-form'),
@@ -94,16 +94,25 @@ export default () => {
     elements.add.addEventListener('click', (e) => {
       e.preventDefault();
       watchedState.loading.state = 'loading';
-      return validateUrl(elements.url.value, watchedState.feeds)
+      validateUrl(elements.url.value, watchedState.feeds)
         .then((error) => {
           if (!error) {
             const proxyUrl = proxy(elements.url.value);
-            return axios.get(proxyUrl).then((res) => {
+            axios.get(proxyUrl).then((res) => {
               const data = parse(res.data.contents);
               const feed = {
-                url: elements.url.value, id: _.uniqueId(), title: data.title, description: data.description,
+                url: elements.url.value,
+                id: _.uniqueId(),
+                title: data.title,
+                description: data.description,
               };
-              const posts = data.feeds.map((feed) => ({ ...feed, channelId: data.id, id: _.uniqueId() }));
+              const posts = data.feeds.map((feedState) => (
+                {
+                  ...feedState,
+                  channelId: data.id,
+                  id: _.uniqueId(),
+                }
+              ));
               watchedState.feeds.unshift(feed);
               watchedState.posts.unshift(...posts);
               watchedState.form = {
@@ -111,7 +120,7 @@ export default () => {
                 state: 'fill',
                 error: null,
               };
-              watchedState.loading = {...watchedState.loading, state: 'valid'};
+              watchedState.loading = { ...watchedState.loading, state: 'valid' };
             });
           } else {
             watchedState.loading = {

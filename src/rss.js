@@ -12,13 +12,13 @@ export default (content) => {
   const description = descriptionEl.textContent;
   const elementFeeds = xmlDom.querySelectorAll('item');
   const feeds = Array.from(elementFeeds).map((feed) => {
-    const titleEl = feed.querySelector('title');
-    const title = titleEl.textContent;
-    const descriptionEl = feed.querySelector('description');
-    const description = descriptionEl.textContent;
-    const linkEl = feed.querySelector('link');
-    const link = linkEl.textContent;
-    return { title, description, link };
+    const titleElFeed = feed.querySelector('title');
+    const titleFeed = titleElFeed.textContent;
+    const descriptionElFeed = feed.querySelector('description');
+    const descriptionFeed = descriptionElFeed.textContent;
+    const linkElFeed = feed.querySelector('link');
+    const link = linkElFeed.textContent;
+    return { title: titleFeed, description: descriptionFeed, link };
   });
   return { title, description, feeds };
 };
