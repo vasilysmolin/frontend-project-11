@@ -94,7 +94,7 @@ export default () => {
     elements.add.addEventListener('click', (e) => {
       e.preventDefault();
       watchedState.loading.state = 'loading';
-      validateUrl(elements.url.value, watchedState.feeds)
+      return validateUrl(elements.url.value, watchedState.feeds)
         .then((error) => {
           if (!error) {
             const proxyUrl = proxy(elements.url.value);
@@ -121,6 +121,13 @@ export default () => {
                 error: null,
               };
               watchedState.loading = { ...watchedState.loading, state: 'valid' };
+            }).catch((err) => {
+              console.log(err);
+              watchedState.loading = {
+                ...watchedState.loading,
+                state: 'invalid',
+                error: getErrorType(err),
+              };
             });
           } else {
             watchedState.loading = {
