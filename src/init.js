@@ -32,11 +32,14 @@ export default () => {
       const proxyUrl = proxy(stateFeed.url);
       return axios.get(proxyUrl).then((res) => {
         const data = parse(res.data.contents);
-        const posts = data.feeds.map((feed) => ({ ...feed, channelId: feed.id, id: _.uniqueId() }));
-        const diffPosts = watchedState.posts.filter((postState) => {
-          const doublePost = _.find(posts, (post) => postState.link === post.link);
-          return _.isEmpty(doublePost);
-        });
+        const newPosts = data.feeds.map((feed) => ({ ...feed, channelId: stateFeed.id }));
+        const oldPosts = watchedState.posts.filter((post) => post.channelId === stateFeed.id);
+        const diffPosts = _.differenceWith(
+          newPosts,
+          oldPosts,
+          (postOne, postTwo) => postOne.link === postTwo.link,
+        )
+          .map((post) => ({ ...post, id: _.uniqueId() }));
         watchedState.posts.unshift(...diffPosts);
         watchedState.form = {
           ...watchedState.form,
@@ -122,7 +125,6 @@ export default () => {
               };
               watchedState.loading = { ...watchedState.loading, state: 'valid' };
             }).catch((err) => {
-              console.log(err);
               watchedState.loading = {
                 ...watchedState.loading,
                 state: 'invalid',
